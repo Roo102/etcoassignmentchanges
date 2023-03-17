@@ -285,10 +285,12 @@ $string['gradedfollowupsubmit'] = 'Graded - follow-up submission received';
 $string['gradedon'] = 'Graded on';
 $string['gradebelowzero'] = 'Grade must be greater than or equal to zero.';
 $string['gradeabovemaximum'] = 'Grade must be less than or equal to {$a}.';
-$string['gradelocked'] = 'This grade is locked or overridden in the gradebook.';
+$string['gradelocked'] = 'This grade is locked in the gradebook.';
 $string['gradeoutof'] = 'Grade out of {$a}';
 $string['gradeoutofhelp'] = 'Grade';
-$string['gradeoutofhelp_help'] = 'Enter the grade for the student\'s submission here. You may include decimals.';
+$string['gradeoutofhelp_help'] = 'Enter the grade for the student\'s submission here. You may include decimals.
+
+If this grade is locked in the gradebook, it may have been overridden, or you do not have permission to edit the grade.';
 $string['gradestudent'] = 'Grade student: (id={$a->id}, fullname={$a->fullname}). ';
 $string['grading'] = 'Grading';
 $string['gradingchangessaved'] = 'The grade changes were saved';

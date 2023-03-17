@@ -7796,7 +7796,7 @@ class assign {
             // Use simple direct grading.
             if ($this->get_instance()->grade > 0) {
                 $name = get_string('gradeoutof', 'assign', $this->get_instance()->grade);
-                if (!$gradingdisabled || !$gradeentrydisabled) {
+                if (!$gradingdisabled && !$gradeentrydisabled) {
                     $gradingelement = $mform->addElement('text', 'grade', $name);
                     $mform->addHelpButton('grade', 'gradeoutofhelp', 'assign');
                     $mform->setType('grade', PARAM_RAW);
