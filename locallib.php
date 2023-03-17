@@ -7669,11 +7669,11 @@ class assign {
     }
 
     /**
-     * Determine if this users grade can be edited by the grader (workflowstate on).
+     * Determine if this users grade can be entered by the grader.
      *
      * @param int $userid - The student userid
      * @param bool $checkworkflow - whether to include a check for the workflow state.
-     * @return bool $gradeentrydisabled
+     * @return bool
      */
     public function grade_entry_disabled($userid, $checkworkflow=true) {
         global $CFG;
@@ -7687,28 +7687,8 @@ class assign {
         if (!has_capability('mod/assign:assessor', $this->context)) {
             return true;
         }
-        if ($checkworkflow && $this->get_instance()->markingworkflow) {
-            $grade = $this->get_user_grade($userid, false);
-            $validstates = $this->get_marking_workflow_states_for_current_user();
-            if (!empty($grade) && !empty($grade->workflowstate) && !array_key_exists($grade->workflowstate, $validstates)) {
-                return true;
-            }
-        }
-        $gradinginfo = grade_get_grades($this->get_course()->id,
-                                        'mod',
-                                        'assign',
-                                        $this->get_instance()->id,
-                                        array($userid));
-        if (!$gradinginfo) {
-            return false;
-        }
 
-        if (!isset($gradinginfo->items[0]->grades[$userid])) {
-            return false;
-        }
-        $gradeentrydisabled = $gradinginfo->items[0]->grades[$userid]->locked ||
-                           $gradinginfo->items[0]->grades[$userid]->overridden;
-        return $gradeentrydisabled;
+        return false;
     }
 
 
@@ -8354,19 +8334,17 @@ class assign {
 
                 // Will not apply update if user does not have permission to assign this workflow state.
                 if (!$gradingdisabled && $this->update_user_flags($flags)) {
-                    if(!$gradeentrydisabled) {
-                        // Update Gradebook.
-                        $grade = $this->get_user_grade($userid, true);
-                        $this->update_grade($grade);
-                        $assign = clone $this->get_instance();
-                        $assign->cmidnumber = $this->get_course_module()->idnumber;
-                        // Set assign gradebook feedback plugin status.
-                        $assign->gradefeedbackenabled = $this->is_gradebook_feedback_enabled();
-                        assign_update_grades($assign, $userid);
+                    // Update Gradebook.
+                    $grade = $this->get_user_grade($userid, true);
+                    $this->update_grade($grade);
+                    $assign = clone $this->get_instance();
+                    $assign->cmidnumber = $this->get_course_module()->idnumber;
+                    // Set assign gradebook feedback plugin status.
+                    $assign->gradefeedbackenabled = $this->is_gradebook_feedback_enabled();
+                    assign_update_grades($assign, $userid);
 
-                        $user = $DB->get_record('user', array('id' => $userid), '*', MUST_EXIST);
-                        \mod_assign\event\workflow_state_updated::create_from_user($this, $user, $state)->trigger();
-                    }
+                    $user = $DB->get_record('user', array('id' => $userid), '*', MUST_EXIST);
+                    \mod_assign\event\workflow_state_updated::create_from_user($this, $user, $state)->trigger();
                 }
             }
         }
