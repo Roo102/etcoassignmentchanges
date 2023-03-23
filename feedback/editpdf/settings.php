@@ -29,6 +29,10 @@ $settings->add(new admin_setting_configcheckbox('assignfeedback_editpdf/default'
                    new lang_string('default', 'assignfeedback_editpdf'),
                    new lang_string('default_help', 'assignfeedback_editpdf'), 1));
 
+$settings->add(new admin_setting_configtext('assignfeedback_editpdf/penstroke',
+                    new lang_string('penstroke', 'assignfeedback_editpdf'),
+                    new lang_string('penstroke_help', 'assignfeedback_editpdf'), 4, PARAM_INT));
+
 // Stamp files setting.
 $name = 'assignfeedback_editpdf/stamps';
 $title = get_string('stamps','assignfeedback_editpdf');
